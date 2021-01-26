@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2017"
+    ],
+    "declaration": true,
+    "outDir": "./"
+  },
+  "files": [
+    "src/index.ts" 
+  ]
+}

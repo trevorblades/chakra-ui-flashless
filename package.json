@@ -1,21 +1,33 @@
 {
   "name": "chakra-ui-flashless",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Tools to implement flashless color modes in Chakra UI",
+  "author": "Trevor Blades <tdblades@gmail.com>",
+  "repository": "trevorblades/chakra-ui-flashless",
+  "license": "MIT",
   "main": "index.js",
+  "keywords": [
+    "chakra-ui",
+    "color",
+    "chakra",
+    "darkmode",
+    "fouc",
+    "flash"
+  ],
   "eslintConfig": {
-    "extends": "@trevorblades"
+    "extends": "@trevorblades/eslint-config/typescript"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "eslint src/*",
+    "test": "exit",
+    "prepare": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@chakra-ui/theme-tools": "^1.0.3",
+    "@chakra-ui/utils": "^1.1.0",
     "@trevorblades/eslint-config": "^7.2.1",
-    "eslint": "^7.18.0"
+    "eslint": "^7.18.0",
+    "typescript": "^4.1.3"
   },
   "dependencies": {
     "lodash.merge": "^4.6.2",

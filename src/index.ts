@@ -1,6 +1,7 @@
-const merge = require('lodash.merge');
-const {outdent} = require('outdent');
-const {getColor, transparentize} = require('@chakra-ui/theme-tools');
+import merge from 'lodash.merge';
+import {Dict} from '@chakra-ui/utils';
+import {getColor, transparentize} from '@chakra-ui/theme-tools';
+import {outdent} from 'outdent';
 
 const baseVariables = {
   '--bg-color': ['white', 'gray.800'],
@@ -15,11 +16,18 @@ const baseVariables = {
   '--button-solid-gray-active': ['gray.300', 'whiteAlpha.400']
 };
 
-exports.createVariables = (theme, customVariables) => {
-  const colorValue = color =>
-    Array.isArray(color)
+type Color = string | [string, number];
+type Variables = Record<string, [Color, Color]>;
+
+export const createVariables = (
+  theme: Dict,
+  customVariables: Variables
+): string => {
+  function colorValue(color: Color) {
+    return Array.isArray(color)
       ? transparentize(...color)(theme)
       : getColor(theme, color);
+  }
 
   const defaultVariables = Object.entries(theme.colors)
     .filter(([key, value]) => key !== 'gray' || typeof value === 'string')
@@ -44,13 +52,13 @@ exports.createVariables = (theme, customVariables) => {
       ...customVariables
     })
       .map(
-        ([name, [light, dark]]) =>
+        ([name, values]) =>
           outdent`
             root.style.setProperty(
               '${name}',
               mql.matches
-                ? '${colorValue(dark)}'
-                : '${colorValue(light)}'
+                ? '${colorValue(values[0])}'
+                : '${colorValue(values[1])}'
             );
           `
       )
@@ -58,14 +66,17 @@ exports.createVariables = (theme, customVariables) => {
   `;
 };
 
-const ghost = ({colorScheme: c}) => ({
-  color: `var(--button-ghost-${c})`,
-  _hover: {bg: `var(--button-ghost-${c}-hover)`},
-  _active: {bg: `var(--button-ghost-${c}-active)`}
-});
+function ghost(props: Dict) {
+  const {colorScheme: c} = props;
+  return {
+    color: `var(--button-ghost-${c})`,
+    _hover: {bg: `var(--button-ghost-${c}-hover)`},
+    _active: {bg: `var(--button-ghost-${c}-active)`}
+  };
+}
 
-exports.flashless = theme =>
-  merge(
+export function flashless(theme: Dict): Dict {
+  return merge(
     {
       config: {
         useSystemColorMode: true
@@ -94,7 +105,7 @@ exports.flashless = theme =>
               _hover: {bg: `var(--button-solid-${c}-hover)`},
               _active: {bg: `var(--button-solid-${c}-active)`}
             }),
-            outline: props => ({
+            outline: (props: Dict) => ({
               borderColor:
                 props.colorScheme === 'gray'
                   ? 'var(--border-color)'
@@ -107,3 +118,4 @@ exports.flashless = theme =>
     },
     theme
   );
+}
