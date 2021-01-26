@@ -19,10 +19,10 @@ const baseVariables = {
 type Color = string | [string, number];
 type Variables = Record<string, [Color, Color]>;
 
-export const createVariables = (
+export function createVariables(
   theme: Dict,
   customVariables: Variables
-): string => {
+): string {
   function colorValue(color: Color) {
     return Array.isArray(color)
       ? transparentize(...color)(theme)
@@ -64,7 +64,7 @@ export const createVariables = (
       )
       .join('\n')}
   `;
-};
+}
 
 function ghost(props: Dict) {
   const {colorScheme: c} = props;
