@@ -1,93 +1,109 @@
+const merge = require('lodash.merge');
 const {outdent} = require('outdent');
-const {getColor} = require('@chakra-ui/theme-tools');
+const {getColor, transparentize} = require('@chakra-ui/theme-tools');
 
-exports.createVariables = (theme, variables = []) => {
-  const createVar = (name, light, dark) => outdent`
-    root.style.setProperty(
-      '${name}',
-      mql.matches
-        ? '${getColor(theme, dark)}'
-        : '${getColor(theme, light)}'
+const baseVariables = {
+  '--bg-color': ['white', 'gray.800'],
+  '--text-color': ['gray.800', 'whiteAlpha.900'],
+  '--placeholder-text-color': ['gray.400', 'whiteAlpha.400'],
+  '--border-color': ['gray.200', 'whiteAlpha.300'],
+  '--button-ghost-gray': ['inherit', 'whiteAlpha.900'],
+  '--button-ghost-gray-hover': ['gray.100', 'whiteAlpha.200'],
+  '--button-ghost-gray-active': ['gray.200', 'whiteAlpha.300'],
+  '--button-solid-gray': ['gray.100', 'whiteAlpha.200'],
+  '--button-solid-gray-hover': ['gray.200', 'whiteAlpha.300'],
+  '--button-solid-gray-active': ['gray.300', 'whiteAlpha.400']
+};
+
+exports.createVariables = (theme, customVariables) => {
+  const colorValue = color =>
+    Array.isArray(color)
+      ? transparentize(...color)(theme)
+      : getColor(theme, color);
+
+  const defaultVariables = Object.entries(theme.colors)
+    .filter(([key, value]) => key !== 'gray' || typeof value === 'string')
+    .reduce(
+      (acc, [c]) => ({
+        ...acc,
+        [`--button-ghost-${c}`]: [`${c}.600`, `${c}.200`],
+        [`--button-ghost-${c}-hover`]: [`${c}.50`, [`${c}.200`, 0.12]],
+        [`--button-ghost-${c}-active`]: [`${c}.100`, [`${c}.200`, 0.24]],
+        [`--button-solid-${c}`]: [`${c}.500`, `${c}.200`],
+        [`--button-solid-${c}-hover`]: [`${c}.600`, `${c}.300`],
+        [`--button-solid-${c}-active`]: [`${c}.700`, `${c}.400`]
+      }),
+      baseVariables
     );
-  `;
 
   return outdent`
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
     const root = document.documentElement;
-    ${createVar('--bg-color', 'white', 'gray.800')}
-    ${createVar('--text-color', 'gray.800', 'whiteAlpha.900')}
-    ${createVar('--placeholder-text-color', 'gray.400', 'whiteAlpha.400')}
-    ${createVar('--border-color', 'gray.200', 'whiteAlpha.300')}
-    ${createVar('--button-text-color', 'white', 'gray.800')}
-    ${createVar('--button-bg-color-gray', 'gray.100', 'whiteAlpha.200')}
-    ${createVar('--button-bg-color-gray-hover', 'gray.200', 'whiteAlpha.300')}
-    ${createVar('--button-bg-color-gray-active', 'gray.300', 'whiteAlpha.400')}
-    ${Object.entries(theme.colors)
-      .filter(([key, value]) => key !== 'gray' || typeof value === 'string')
+    ${Object.entries({
+      ...defaultVariables,
+      ...customVariables
+    })
       .map(
-        ([color]) => outdent`
-          ${createVar(
-            `--button-bg-color-${color}`,
-            `${color}.500`,
-            `${color}.200`
-          )}
-          ${createVar(
-            `--button-bg-color-${color}-hover`,
-            `${color}.600`,
-            `${color}.300`
-          )}
-          ${createVar(
-            `--button-bg-color-${color}-active`,
-            `${color}.700`,
-            `${color}.400`
-          )}
-        `
+        ([name, [light, dark]]) =>
+          outdent`
+            root.style.setProperty(
+              '${name}',
+              mql.matches
+                ? '${colorValue(dark)}'
+                : '${colorValue(light)}'
+            );
+          `
       )
-      .concat(variables.map(args => createVar(...args)))
       .join('\n')}
   `;
 };
 
-/*
-supports custom variables
+const ghost = ({colorScheme: c}) => ({
+  color: `var(--button-ghost-${c})`,
+  _hover: {bg: `var(--button-ghost-${c}-hover)`},
+  _active: {bg: `var(--button-ghost-${c}-active)`}
+});
 
-createVariables(
-  theme,
-  [
-    ['--inline-code-bg-color', 'indigo.50', 'gray.900'],
-    ['--inline-code-text-color', 'indigo.800', 'indigo.200']
-  ]
-)
-*/
-
-exports.overrides = {
-  config: {
-    useSystemColorMode: true
-  },
-  styles: {
-    global: {
-      body: {
-        bg: 'var(--bg-color)',
-        color: 'var(--text-color)'
+exports.flashless = theme =>
+  merge(
+    {
+      config: {
+        useSystemColorMode: true
       },
-      '*::placeholder': {
-        color: 'var(--placeholder-text-color)'
+      styles: {
+        global: {
+          body: {
+            bg: 'var(--bg-color)',
+            color: 'var(--text-color)'
+          },
+          '*::placeholder': {
+            color: 'var(--placeholder-text-color)'
+          },
+          '*, *::before, &::after': {
+            borderColor: 'var(--border-color)'
+          }
+        }
       },
-      '*, *::before, &::after': {
-        borderColor: 'var(--border-color)'
+      components: {
+        Button: {
+          variants: {
+            ghost,
+            solid: ({colorScheme: c}) => ({
+              color: c !== 'gray' && 'var(--bg-color)',
+              bg: `var(--button-solid-${c})`,
+              _hover: {bg: `var(--button-solid-${c}-hover)`},
+              _active: {bg: `var(--button-solid-${c}-active)`}
+            }),
+            outline: props => ({
+              borderColor:
+                props.colorScheme === 'gray'
+                  ? 'var(--border-color)'
+                  : 'currentColor',
+              ...ghost(props)
+            })
+          }
+        }
       }
-    }
-  },
-  components: {
-    Button: {
-      variants: {
-        solid: ({colorScheme: c}) => ({
-          color: c !== 'gray' && 'var(--button-text-color)',
-          bg: `var(--button-bg-color-${c})`,
-          _hover: {bg: `var(--button-bg-color-${c}-hover)`},
-          _active: {bg: `var(--button-bg-color-${c}-active)`}
-        })
-      }
-    }
-  }
-};
+    },
+    theme
+  );

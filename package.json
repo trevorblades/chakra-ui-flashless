@@ -18,6 +18,7 @@
     "eslint": "^7.18.0"
   },
   "dependencies": {
+    "lodash.merge": "^4.6.2",
     "outdent": "^0.8.0"
   },
   "peerDependencies": {
