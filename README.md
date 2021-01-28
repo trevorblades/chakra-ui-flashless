@@ -4,7 +4,7 @@ This library contains all the tools necessary to implement Chakra UI color modes
 
 ![flash sucks](https://media.giphy.com/media/hXPbekQiT94VkIR4To/giphy.gif)
 
-The approach is based on [a blog post](https://www.joshwcomeau.com/react/dark-mode/) by @joshwcomeau. It goes something like this:
+The approach is based on [a blog post](https://www.joshwcomeau.com/react/dark-mode/) by [@joshwcomeau](https://github.com/joshwcomeau). It goes something like this:
 
 1. Inject a script at the top of your HTML `<body>` that checks the system color mode.
 2. Define a bunch of CSS variables for your different UI colors, based on whether the system color mode is light or dark.
