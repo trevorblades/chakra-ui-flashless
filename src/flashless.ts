@@ -2,15 +2,6 @@ import defaultTheme from '@chakra-ui/theme';
 import merge from 'lodash.merge';
 import {Dict} from '@chakra-ui/utils';
 
-function ghost(props: Dict) {
-  const {colorScheme: c} = props;
-  return {
-    color: `var(--button-ghost-${c})`,
-    _hover: {bg: `var(--button-ghost-${c}-hover)`},
-    _active: {bg: `var(--button-ghost-${c}-active)`}
-  };
-}
-
 const Badge = {
   variants: {
     solid(props: Dict) {
@@ -36,6 +27,15 @@ const Badge = {
     }
   }
 };
+
+function ghost(props: Dict) {
+  const {colorScheme: c} = props;
+  return {
+    color: `var(--button-ghost-${c})`,
+    _hover: {bg: `var(--button-ghost-${c}-hover)`},
+    _active: {bg: `var(--button-ghost-${c}-active)`}
+  };
+}
 
 export function flashless(theme: Dict = defaultTheme): Dict {
   return merge(
