@@ -20,32 +20,46 @@ export function flashless(theme: Dict = defaultTheme): Dict {
       styles: {
         global: {
           body: {
-            bg: 'var(--bg-color)',
-            color: 'var(--text-color)'
+            bg: 'var(--bg)',
+            color: 'var(--text)'
           },
           '*::placeholder': {
-            color: 'var(--placeholder-text-color)'
+            color: 'var(--placeholder-text)'
           },
           '*, *::before, &::after': {
-            borderColor: 'var(--border-color)'
+            borderColor: 'var(--border)'
           }
         }
       },
       components: {
+        Badge: {
+          variants: {
+            solid: ({colorScheme: c}) => ({
+              bg: `var(--badge-solid-${c})`,
+              color: 'var(--badge-solid-text)'
+            }),
+            subtle: ({colorScheme: c}) => ({
+              bg: `var(--badge-subtle-${c})`,
+              color: `var(--badge-subtle-${c}-text)`
+            }),
+            outline: ({colorScheme: c}) => ({
+              color: `var(--badge-outline-${c})`,
+              boxShadow: `inset 0 0 0px 1px var(--badge-outline-${c})`
+            })
+          }
+        },
         Button: {
           variants: {
             ghost,
             solid: ({colorScheme: c}) => ({
-              color: c !== 'gray' && 'var(--bg-color)',
+              color: c !== 'gray' && 'var(--bg)',
               bg: `var(--button-solid-${c})`,
               _hover: {bg: `var(--button-solid-${c}-hover)`},
               _active: {bg: `var(--button-solid-${c}-active)`}
             }),
             outline: (props: Dict) => ({
               borderColor:
-                props.colorScheme === 'gray'
-                  ? 'var(--border-color)'
-                  : 'currentColor',
+                props.colorScheme === 'gray' ? 'var(--border)' : 'currentColor',
               ...ghost(props)
             })
           }
