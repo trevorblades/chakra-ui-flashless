@@ -12,6 +12,13 @@ The approach is based on [a blog post](https://www.joshwcomeau.com/react/dark-mo
 
 This library simplifies the creation of these light-sensitive color variables, and makes it easy to update your Chakra UI theme to use them.
 
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Gatsby](#gatsby)
+  - [Next.js](#nextjs)
+- [Custom variables](#custom-variables)
+- [License](#license)
+
 ## Installation
 
 Before using this library, you should have installed [Chakra UI](https://chakra-ui.com/docs/getting-started#installation) and its dependencies.
