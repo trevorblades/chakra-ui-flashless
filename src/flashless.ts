@@ -36,7 +36,7 @@ export function flashless(theme: Dict = defaultTheme): Dict {
           variants: {
             solid: ({colorScheme: c}) => ({
               bg: `var(--badge-solid-${c})`,
-              color: 'var(--badge-solid-text)'
+              color: 'var(--badge-text)'
             }),
             subtle: ({colorScheme: c}) => ({
               bg: `var(--badge-subtle-${c})`,

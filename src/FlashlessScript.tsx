@@ -8,13 +8,7 @@ const baseVariables = {
   '--text': ['gray.800', 'whiteAlpha.900'],
   '--placeholder-text': ['gray.400', 'whiteAlpha.400'],
   '--border': ['gray.200', 'whiteAlpha.300'],
-  '--badge-solid-text': ['white', 'whiteAlpha.800'],
-  '--button-ghost-gray': ['inherit', 'whiteAlpha.900'],
-  '--button-ghost-gray-hover': ['gray.100', 'whiteAlpha.200'],
-  '--button-ghost-gray-active': ['gray.200', 'whiteAlpha.300'],
-  '--button-solid-gray': ['gray.100', 'whiteAlpha.200'],
-  '--button-solid-gray-hover': ['gray.200', 'whiteAlpha.300'],
-  '--button-solid-gray-active': ['gray.300', 'whiteAlpha.400']
+  '--badge-text': ['white', 'whiteAlpha.800']
 };
 
 type Color = string | [string, number];
@@ -28,23 +22,41 @@ function createVariables(theme: Dict, customVariables?: Variables): string {
   }
 
   const defaultVariables = Object.entries(theme.colors)
-    .filter(([key, value]) => key !== 'gray' || typeof value === 'string')
-    .reduce(
-      (acc, [c]) => ({
+    .filter(entries => typeof entries[1] === 'object')
+    .reduce((acc, [c]) => {
+      const isGray = c === 'gray';
+      return {
         ...acc,
         [`--badge-solid-${c}`]: [`${c}.500`, [`${c}.500`, 0.6]],
         [`--badge-subtle-${c}`]: [`${c}.100`, [`${c}.200`, 0.16]],
         [`--badge-subtle-${c}-text`]: [`${c}.800`, `${c}.200`],
         [`--badge-outline-${c}`]: [`${c}.500`, [`${c}.200`, 0.8]],
-        [`--button-ghost-${c}`]: [`${c}.600`, `${c}.200`],
-        [`--button-ghost-${c}-hover`]: [`${c}.50`, [`${c}.200`, 0.12]],
-        [`--button-ghost-${c}-active`]: [`${c}.100`, [`${c}.200`, 0.24]],
-        [`--button-solid-${c}`]: [`${c}.500`, `${c}.200`],
-        [`--button-solid-${c}-hover`]: [`${c}.600`, `${c}.300`],
-        [`--button-solid-${c}-active`]: [`${c}.700`, `${c}.400`]
-      }),
-      baseVariables
-    );
+        [`--button-ghost-${c}`]: [
+          isGray ? 'inherit' : `${c}.600`,
+          isGray ? 'whiteAlpha.900' : `${c}.200`
+        ],
+        [`--button-ghost-${c}-hover`]: [
+          `${c}.${isGray ? 100 : 50}`,
+          isGray ? 'whiteAlpha.200' : [`${c}.200`, 0.12]
+        ],
+        [`--button-ghost-${c}-active`]: [
+          `${c}.${isGray ? 200 : 100}`,
+          isGray ? 'whiteAlpha.300' : [`${c}.200`, 0.24]
+        ],
+        [`--button-solid-${c}`]: [
+          `${c}.${isGray ? 100 : 500}`,
+          isGray ? 'whiteAlpha.200' : `${c}.200`
+        ],
+        [`--button-solid-${c}-hover`]: [
+          `${c}.${isGray ? 200 : 600}`,
+          isGray ? 'whiteAlpha.300' : `${c}.300`
+        ],
+        [`--button-solid-${c}-active`]: [
+          `${c}.${isGray ? 300 : 700}`,
+          isGray ? 'whiteAlpha.400' : `${c}.400`
+        ]
+      };
+    }, baseVariables);
 
   return outdent`
     const mql = window.matchMedia('(prefers-color-scheme: dark)');
