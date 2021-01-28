@@ -11,6 +11,32 @@ function ghost(props: Dict) {
   };
 }
 
+const Badge = {
+  variants: {
+    solid(props: Dict) {
+      const {colorScheme: c} = props;
+      return {
+        bg: `var(--badge-solid-${c})`,
+        color: 'var(--badge-text)'
+      };
+    },
+    subtle(props: Dict) {
+      const {colorScheme: c} = props;
+      return {
+        bg: `var(--badge-subtle-${c})`,
+        color: `var(--badge-subtle-${c}-text)`
+      };
+    },
+    outline(props: Dict) {
+      const {colorScheme: c} = props;
+      return {
+        color: `var(--badge-outline-${c})`,
+        boxShadow: `inset 0 0 0px 1px var(--badge-outline-${c})`
+      };
+    }
+  }
+};
+
 export function flashless(theme: Dict = defaultTheme): Dict {
   return merge(
     {
@@ -32,22 +58,7 @@ export function flashless(theme: Dict = defaultTheme): Dict {
         }
       },
       components: {
-        Badge: {
-          variants: {
-            solid: ({colorScheme: c}) => ({
-              bg: `var(--badge-solid-${c})`,
-              color: 'var(--badge-text)'
-            }),
-            subtle: ({colorScheme: c}) => ({
-              bg: `var(--badge-subtle-${c})`,
-              color: `var(--badge-subtle-${c}-text)`
-            }),
-            outline: ({colorScheme: c}) => ({
-              color: `var(--badge-outline-${c})`,
-              boxShadow: `inset 0 0 0px 1px var(--badge-outline-${c})`
-            })
-          }
-        },
+        Badge,
         Button: {
           variants: {
             ghost,
@@ -61,6 +72,19 @@ export function flashless(theme: Dict = defaultTheme): Dict {
               borderColor:
                 props.colorScheme === 'gray' ? 'var(--border)' : 'currentColor',
               ...ghost(props)
+            })
+          }
+        },
+        Tag: {
+          variants: {
+            subtle: (props: Dict) => ({
+              container: Badge.variants.subtle(props)
+            }),
+            solid: (props: Dict) => ({
+              container: Badge.variants.solid(props)
+            }),
+            outline: (props: Dict) => ({
+              container: Badge.variants.outline(props)
             })
           }
         }
