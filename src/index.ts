@@ -57,8 +57,8 @@ export function createVariables(
             root.style.setProperty(
               '${name}',
               mql.matches
-                ? '${colorValue(values[0])}'
-                : '${colorValue(values[1])}'
+                ? '${colorValue(values[1])}'
+                : '${colorValue(values[0])}'
             );
           `
       )
