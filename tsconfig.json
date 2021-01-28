@@ -4,11 +4,12 @@
       "dom",
       "es2017"
     ],
+    "jsx": "react",
     "esModuleInterop": true,
     "declaration": true,
     "outDir": "./"
   },
   "files": [
-    "src/index.ts" 
+    "src/index.tsx" 
   ]
 }

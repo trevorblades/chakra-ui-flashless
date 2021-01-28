@@ -1,17 +1,37 @@
 # Flashless Chakra UI
 
+This library contains all the tools necessary to implement Chakra UI color modes on statically rendered websites without [the flash](https://github.com/chakra-ui/chakra-ui/issues/1878).
+
+![flash sucks](https://media.giphy.com/media/hXPbekQiT94VkIR4To/giphy.gif)
+
+The approach is based on [a blog post](https://www.joshwcomeau.com/react/dark-mode/) by @joshwcomeau. It goes something like this:
+
+1. Inject a script at the top of your HTML `<body>` that checks the system color mode.
+2. Define a bunch of CSS variables for your different UI colors, based on whether the system color mode is light or dark.
+3. Use those variables in your CSS instead of raw colors.
+
+This library simplifies the creation of these light-sensitive color variables, and makes it easy to update your Chakra UI theme to use them.
+
 ## Installation
 
+Before using this library, you should have installed [Chakra UI](https://chakra-ui.com/docs/getting-started#installation) and its dependencies.
+
 ```bash
-npm install chakra-ui-flashless @chakra-ui/theme-tools
+npm install chakra-ui-flashless
 ```
 
 ## Usage
+
+First, wrap your theme overrides in the `flashless` function. If you use the default theme with no overrides, simply pass `flashless()` to `extendTheme`.
 
 ```js
 import {extendTheme} from '@chakra-ui/react';
 import {flashless} from 'chakra-ui-flashless';
 
+// without overrides
+const theme = extendTheme(flashless());
+
+// with overrides
 const theme = extendTheme(
   flashless({
     styles: {
@@ -28,7 +48,9 @@ const theme = extendTheme(
 export default theme;
 ```
 
-## Gatsby
+Next a `<script>` tag must be 
+
+### Gatsby
 
 ```jsx
 import theme from './src/@chakra-ui/gatsby-plugin/theme';
@@ -43,7 +65,7 @@ export const onRenderBody = ({setPreBodyComponents}) => {
 };
 ```
 
-## Next.js
+### Next.js
 
 ```jsx
 // pages/_document.js
@@ -58,10 +80,8 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
-          <script dangerouslySetInnerHTML={{__html: variables}} />
-        </Head>
         <body>
+          <script dangerouslySetInnerHTML={{__html: variables}} />
           <Main />
           <NextScript />
         </body>
@@ -86,3 +106,7 @@ const variables = createVariables(
   }
 );
 ```
+
+## License
+
+[MIT](./LICENSE)

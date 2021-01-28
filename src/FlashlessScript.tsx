@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+import * as React from 'react';
 import {Dict} from '@chakra-ui/utils';
 import {getColor, transparentize} from '@chakra-ui/theme-tools';
 import {outdent} from 'outdent';
@@ -19,10 +19,7 @@ const baseVariables = {
 type Color = string | [string, number];
 type Variables = Record<string, [Color, Color]>;
 
-export function createVariables(
-  theme: Dict,
-  customVariables: Variables
-): string {
+function createVariables(theme: Dict, customVariables?: Variables): string {
   function colorValue(color: Color) {
     return Array.isArray(color)
       ? transparentize(...color)(theme)
@@ -66,56 +63,20 @@ export function createVariables(
   `;
 }
 
-function ghost(props: Dict) {
-  const {colorScheme: c} = props;
-  return {
-    color: `var(--button-ghost-${c})`,
-    _hover: {bg: `var(--button-ghost-${c}-hover)`},
-    _active: {bg: `var(--button-ghost-${c}-active)`}
-  };
+interface FlashlessScriptProps {
+  theme: Dict;
+  customVariables?: Variables;
 }
 
-export function flashless(theme: Dict): Dict {
-  return merge(
-    {
-      config: {
-        useSystemColorMode: true
-      },
-      styles: {
-        global: {
-          body: {
-            bg: 'var(--bg-color)',
-            color: 'var(--text-color)'
-          },
-          '*::placeholder': {
-            color: 'var(--placeholder-text-color)'
-          },
-          '*, *::before, &::after': {
-            borderColor: 'var(--border-color)'
-          }
-        }
-      },
-      components: {
-        Button: {
-          variants: {
-            ghost,
-            solid: ({colorScheme: c}) => ({
-              color: c !== 'gray' && 'var(--bg-color)',
-              bg: `var(--button-solid-${c})`,
-              _hover: {bg: `var(--button-solid-${c}-hover)`},
-              _active: {bg: `var(--button-solid-${c}-active)`}
-            }),
-            outline: (props: Dict) => ({
-              borderColor:
-                props.colorScheme === 'gray'
-                  ? 'var(--border-color)'
-                  : 'currentColor',
-              ...ghost(props)
-            })
-          }
-        }
-      }
-    },
-    theme
+export function FlashlessScript({
+  theme,
+  customVariables
+}: FlashlessScriptProps): JSX.Element {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: createVariables(theme, customVariables)
+      }}
+    />
   );
 }
