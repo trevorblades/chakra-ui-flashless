@@ -5,7 +5,7 @@
   "author": "Trevor Blades <tdblades@gmail.com>",
   "repository": "trevorblades/chakra-ui-flashless",
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/index.js",
   "keywords": [
     "chakra-ui",
     "color",

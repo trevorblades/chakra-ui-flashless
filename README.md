@@ -48,40 +48,62 @@ const theme = extendTheme(
 export default theme;
 ```
 
-Next a `<script>` tag must be 
+Next append the `FlashlessScript` component to the top of the HTML `<body>` and pass your Chakra theme as a prop. This looks slightly different depending on your static site generator.
+
+```js
+import theme from './theme';
+
+<FlashlessScript theme={theme} />
+```
 
 ### Gatsby
 
-```jsx
-import theme from './src/@chakra-ui/gatsby-plugin/theme';
-import {createVariables} from 'chakra-ui-flashless';
+In `gatsby-ssr.js`, set a `FlashlessScript` as a pre-body component using the [`onRenderBody` API](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/#onRenderBody).
 
-const variables = createVariables(theme);
+```jsx
+// gatsby-ssr.js
+import theme from './src/@chakra-ui/gatsby-plugin/theme';
+import {FlashlessScript} from 'chakra-ui-flashless';
 
 export const onRenderBody = ({setPreBodyComponents}) => {
   setPreBodyComponents([
-    <script dangerouslySetInnerHTML={{__html: variables}} />
+    <FlashlessScript key="chakra-ui-flashless" theme={theme} />
   ]);
 };
 ```
 
+I'd also recommend disabling Chakra's built-in color mode features in the options for its Gatsby plugin.
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: '@chakra-ui/gatsby-plugin',
+      options: {
+        isUsingColorMode: false
+      }
+    }
+  ]
+};
+```
+
 ### Next.js
+
+In Next.js, simply append the `FlashlessScript` to the `<body>` using a [custom `Document`](https://nextjs.org/docs/advanced-features/custom-document).
 
 ```jsx
 // pages/_document.js
 import Document, {Head, Html, Main, NextScript} from 'next/document';
 import React from 'react';
 import theme from './theme';
-import {createVariables} from 'chakra-ui-flashless';
-
-const variables = createVariables(theme);
+import {FlashlessScript} from 'chakra-ui-flashless';
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html>
         <body>
-          <script dangerouslySetInnerHTML={{__html: variables}} />
+          <FlashlessScript theme={theme} />
           <Main />
           <NextScript />
         </body>
@@ -93,18 +115,30 @@ export default class MyDocument extends Document {
 
 ## Custom variables
 
+You can create additional color variables to use in your UI with the `customVariables` prop. It accepts an object that maps CSS variable names to their light and dark variants using an array with two values.
+
+To represent semitransparent colors, you can define a single variant as yet another array with two values: the color, and its opacity.
+
+```js
+{
+  '--variable-name': [lightVariant, [darkVariant, 0.5]]
+}
+```
+
+You can pass any named color that is defined in your Chakra theme, and easily manipulate their transparency.
+
 ```jsx
-const variables = createVariables(
-  theme,
-  {
+<FlashlessScript
+  theme={theme}
+  customVariables={{
     // define custom color variables
     '--inline-code-bg-color': ['indigo.50', 'gray.900'],
     '--inline-code-text-color': [
       'indigo.800',
-      ['indigo.200', 0.5] // supply an array for transparent colors
+      ['indigo.200', 0.5] // supply an array for semitransparent colors
     ]
-  }
-);
+  }}
+/>
 ```
 
 ## License

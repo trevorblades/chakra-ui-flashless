@@ -7,7 +7,7 @@
     "jsx": "react",
     "esModuleInterop": true,
     "declaration": true,
-    "outDir": "./"
+    "outDir": "./lib"
   },
   "files": [
     "src/index.tsx" 
