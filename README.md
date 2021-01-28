@@ -1,8 +1,8 @@
 # Flashless Chakra UI
 
-This library contains all the tools necessary to implement Chakra UI color modes on statically rendered websites without [the flash](https://github.com/chakra-ui/chakra-ui/issues/1878).
+This library contains all the tools necessary to implement Chakra UI color modes on statically rendered websites without [the flash](https://github.com/chakra-ui/chakra-ui/issues/1878). This technique sets its colors based on the system color mode and doesn't currently support toggling the color mode within the site.
 
-![flash sucks](https://media.giphy.com/media/hXPbekQiT94VkIR4To/giphy.gif)
+![night time](https://media.giphy.com/media/l2YSDYQbXeo9M3Ize/giphy.gif)
 
 The approach is based on [a blog post](https://www.joshwcomeau.com/react/dark-mode/) by [@joshwcomeau](https://github.com/joshwcomeau). It goes something like this:
 
