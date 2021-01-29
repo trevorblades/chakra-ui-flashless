@@ -141,8 +141,8 @@ You can pass any named color that is defined in your Chakra theme, and easily ma
   theme={theme}
   customVariables={{
     // define custom color variables
-    '--inline-code-bg-color': ['indigo.50', 'gray.900'],
-    '--inline-code-text-color': [
+    '--inline-code-bg': ['indigo.50', 'gray.900'],
+    '--inline-code-text': [
       'indigo.800',
       ['indigo.200', 0.5] // supply an array for semitransparent colors
     ]
