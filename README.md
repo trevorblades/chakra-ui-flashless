@@ -71,7 +71,9 @@ In `gatsby-ssr.js`, set a `FlashlessScript` as a pre-body component using the [`
 
 ```jsx
 // gatsby-ssr.js
-import theme from './src/@chakra-ui/gatsby-plugin/theme';
+import React from 'react';
+import theme from './src/theme';
+import {ChakraProvider} from '@chakra-ui/react';
 import {FlashlessScript} from 'chakra-ui-flashless';
 
 export const onRenderBody = ({setPreBodyComponents}) => {
@@ -79,21 +81,19 @@ export const onRenderBody = ({setPreBodyComponents}) => {
     <FlashlessScript key="chakra-ui-flashless" theme={theme} />
   ]);
 };
+
+export const wrapRootElement = ({element}) => (
+  <ChakraProvider theme={theme}>{element}</ChakraProvider>
+);
 ```
 
-I'd also recommend disabling Chakra's built-in color mode features in the options for its Gatsby plugin.
+You should also use `wrapRootElement` to wrap your app in a `ChakraProvider` and pass your theme there as well. You could use `@chakra-ui/gatsby-plugin` to do this, but it also injects `ColorModeScript` from Chakra UI, which you won't need anymore if you're using this method.
+
+Export it from `gatsby-ssr.js` and `gatsby-browser.js`.
 
 ```js
-module.exports = {
-  plugins: [
-    {
-      resolve: '@chakra-ui/gatsby-plugin',
-      options: {
-        isUsingColorMode: false
-      }
-    }
-  ]
-};
+// gatsby-browser.js
+export {wrapRootElement} from './gatsby-ssr';
 ```
 
 ### Next.js
