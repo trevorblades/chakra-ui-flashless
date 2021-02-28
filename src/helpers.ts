@@ -1,10 +1,10 @@
-import {Color} from './types';
+import {Color, Variables} from './types';
 import {Dict} from '@chakra-ui/utils';
 import {getColor, transparentize} from '@chakra-ui/theme-tools';
 
 import {BASE_VARIABLES} from './constants';
 
-export function createDefaultVariables(theme: Dict) {
+export function createDefaultVariables(theme: Dict): Variables {
   return Object.entries(theme.colors)
     .filter(entries => typeof entries[1] === 'object')
     .reduce((acc, [c]) => {
