@@ -7,10 +7,10 @@ import React, {
   useState
 } from 'react';
 
-import {ColorModeToggleProps} from './types';
+import {ColorModeContextValue, ColorModeToggleProps} from './types';
 import {createDefaultVariables, getColorValue} from './helpers';
 
-const ColorModeContext = createContext({});
+const ColorModeContext = createContext({} as ColorModeContextValue);
 
 export function ColorModeToggle({
   theme,
@@ -72,4 +72,5 @@ export function ColorModeToggle({
   );
 }
 
-export const useColorMode = () => useContext(ColorModeContext);
+export const useColorMode = (): ColorModeContextValue =>
+  useContext(ColorModeContext);
