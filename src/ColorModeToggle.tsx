@@ -37,7 +37,7 @@ export function ColorModeToggle({
 
     setColorMode(prev => {
       const newColorMode = prev === 'dark' ? 'light' : 'dark';
-      const isLightMode = newColorMode === 'dark';
+      const isDarkMode = newColorMode === 'dark';
 
       localStorage.setItem('chakra-ui-color-mode', newColorMode);
 
@@ -47,7 +47,7 @@ export function ColorModeToggle({
       }).forEach(([name, values]) =>
         root.style.setProperty(
           name,
-          isLightMode
+          isDarkMode
             ? `${getColorValue(theme, values[1])}`
             : `${getColorValue(theme, values[0])}`
         )
