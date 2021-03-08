@@ -43,7 +43,7 @@ export function ColorModeToggle({
         )
       );
 
-      root.setProperty('--chakra-ui-color-mode', newColorMode);
+      root.style.setProperty('--chakra-ui-color-mode', newColorMode);
 
       return newColorMode;
     });
