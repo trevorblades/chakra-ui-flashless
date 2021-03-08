@@ -15,8 +15,8 @@ const ColorModeContext = createContext({} as ColorModeContextValue);
 export function ColorModeToggle({
   theme,
   children,
-  customVariables
-  initialColorMode,
+  customVariables,
+  initialColorMode
 }: ColorModeToggleProps): JSX.Element {
   const [colorMode, setColorMode] = useState(initialColorMode);
 
