@@ -16,21 +16,13 @@ export function ColorModeToggle({
   theme,
   children,
   customVariables
+  initialColorMode,
 }: ColorModeToggleProps): JSX.Element {
-  const [colorMode, setColorMode] = useState(undefined);
+  const [colorMode, setColorMode] = useState(initialColorMode);
 
   const defaultVariables = useMemo(() => createDefaultVariables(theme), [
     theme
   ]);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    const initialColorValue = root.style.getPropertyValue(
-      '--chakra-ui-color-mode'
-    );
-
-    setColorMode(initialColorValue);
-  }, []);
 
   const toggleColorMode = useCallback(() => {
     const root = window.document.documentElement;
@@ -50,6 +42,8 @@ export function ColorModeToggle({
             : `${getColorValue(theme, values[0])}`
         )
       );
+
+      root.setProperty('--chakra-ui-color-mode', newColorMode);
 
       return newColorMode;
     });
