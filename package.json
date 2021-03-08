@@ -1,6 +1,6 @@
 {
-  "name": "@laura-beatris/chakra-ui-flashless",
-  "version": "0.0.8",
+  "name": "@laurabeatris/chakra-ui-flashless",
+  "version": "0.0.9",
   "description": "Tools to implement flashless color modes in Chakra UI",
   "author": "Trevor Blades <tdblades@gmail.com>",
   "repository": "trevorblades/chakra-ui-flashless",
