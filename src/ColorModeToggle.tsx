@@ -12,7 +12,7 @@ import {createDefaultVariables, getColorValue} from './helpers';
 
 const ColorModeContext = createContext({} as ColorModeContextValue);
 
-export function ColorModeToggle({
+export function ColorModeToggleProvider({
   theme,
   children,
   customVariables,
