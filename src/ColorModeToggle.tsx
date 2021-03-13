@@ -9,6 +9,7 @@ import React, {
 
 import {ColorModeContextValue, ColorModeToggleProps} from './types';
 import {createDefaultVariables, getColorValue} from './helpers';
+import {usePrefersColorScheme} from './hooks/usePrefersColorScheme';
 
 const ColorModeContext = createContext({} as ColorModeContextValue);
 
@@ -19,6 +20,18 @@ export function ColorModeToggleProvider({
   initialColorMode
 }: ColorModeToggleProps): JSX.Element {
   const [colorMode, setColorMode] = useState(initialColorMode);
+  const {prefersColorScheme, hasMounted} = usePrefersColorScheme();
+
+  useEffect(() => {
+    const shouldUsePrefersColorScheme =
+      !hasMounted && !initialColorMode && prefersColorScheme;
+
+    if (!shouldUsePrefersColorScheme) {
+      return;
+    }
+
+    setColorMode(prefersColorScheme);
+  }, [hasMounted, initialColorMode, prefersColorScheme]);
 
   const defaultVariables = useMemo(() => createDefaultVariables(theme), [
     theme
