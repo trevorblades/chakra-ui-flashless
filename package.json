@@ -1,6 +1,6 @@
 {
   "name": "@laurabeatris/chakra-ui-flashless",
-  "version": "0.1.10",
+  "version": "0.2.11",
   "description": "Tools to implement flashless color modes in Chakra UI",
   "author": "Trevor Blades <tdblades@gmail.com>",
   "repository": "trevorblades/chakra-ui-flashless",
@@ -22,7 +22,7 @@
     "build": "rollup -c",
     "pretest": "eslint src/*",
     "test": "exit",
-    "prepare": "build"
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@chakra-ui/react": "^1.1.6",
