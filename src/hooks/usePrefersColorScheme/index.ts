@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {useHasMounted} from '../useHasMounted';
 
@@ -11,26 +11,18 @@ export function usePrefersColorScheme(): UsePrefersColorSchemePayload {
   const hasMounted = useHasMounted();
   const [prefersColorScheme, setPrefersColorScheme] = useState(null);
 
-  const getPrefersColorScheme = useCallback(prefersColorScheme => {
-    const newColorScheme = prefersColorScheme.matches ? 'dark' : 'light';
-
-    setPrefersColorScheme(newColorScheme);
-  }, []);
-
   useEffect(() => {
     if (!hasMounted) {
       return;
     }
 
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', getPrefersColorScheme);
+    const prefersColorScheme = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    );
+    const newColorScheme = prefersColorScheme.matches ? 'dark' : 'light';
 
-    return () =>
-      window
-        .matchMedia('(prefers-color-scheme: dark)')
-        .removeEventListener('change', getPrefersColorScheme);
-  }, [getPrefersColorScheme, hasMounted]);
+    setPrefersColorScheme(newColorScheme);
+  }, [hasMounted]);
 
   return {prefersColorScheme, hasMounted};
 }
