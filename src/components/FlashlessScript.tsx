@@ -3,7 +3,7 @@ import {Dict} from '@chakra-ui/utils';
 import {getColor, transparentize} from '@chakra-ui/theme-tools';
 import {outdent} from 'outdent';
 
-import {Color, Variables} from './types';
+import {Color, Variables} from '../types';
 
 const baseVariables = {
   '--bg': ['white', 'gray.800'],

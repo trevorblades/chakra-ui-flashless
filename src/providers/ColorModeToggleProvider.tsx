@@ -7,9 +7,9 @@ import React, {
   useState
 } from 'react';
 
-import {ColorModeContextValue, ColorModeToggleProps} from './types';
-import {createDefaultVariables, getColorValue} from './helpers';
-import {usePrefersColorScheme} from './hooks/usePrefersColorScheme';
+import {ColorModeContextValue, ColorModeToggleProps} from '../types';
+import {createDefaultVariables, getColorValue} from '../helpers';
+import {usePrefersColorScheme} from '../hooks/usePrefersColorScheme';
 
 const ColorModeContext = createContext({} as ColorModeContextValue);
 
@@ -24,7 +24,7 @@ export function ColorModeToggleProvider({
 
   useEffect(() => {
     const shouldUsePrefersColorScheme =
-      !hasMounted && !initialColorMode && prefersColorScheme;
+      hasMounted && !initialColorMode && prefersColorScheme;
 
     if (!shouldUsePrefersColorScheme) {
       return;
