@@ -1,4 +1,4 @@
-import {Color, Variables} from './types';
+import {Color, ToggleColorVariablesParameters, Variables} from './types';
 import {Dict} from '@chakra-ui/utils';
 import {getColor, transparentize} from '@chakra-ui/theme-tools';
 
@@ -47,4 +47,30 @@ export function getColorValue(theme: Dict, color: Color): string {
   return Array.isArray(color)
     ? transparentize(...color)(theme)
     : getColor(theme, color);
+}
+
+export function toggleColorVariables({
+  theme,
+  colorMode,
+  customVariables
+}: ToggleColorVariablesParameters): void {
+  const defaultVariables = createDefaultVariables(theme);
+
+  const root = window.document.documentElement;
+
+  const isDarkMode = colorMode === 'dark';
+
+  Object.entries({
+    ...defaultVariables,
+    ...customVariables
+  }).forEach(([name, values]) =>
+    root.style.setProperty(
+      name,
+      isDarkMode
+        ? `${getColorValue(theme, values[1])}`
+        : `${getColorValue(theme, values[0])}`
+    )
+  );
+
+  root.style.setProperty('--chakra-ui-color-mode', colorMode);
 }

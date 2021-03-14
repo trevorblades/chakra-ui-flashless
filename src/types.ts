@@ -13,3 +13,8 @@ export type ColorModeContextValue = {
   colorMode: ColorMode;
   toggleColorMode: () => void;
 };
+export type ToggleColorVariablesParameters = {
+  theme: Dict;
+  colorMode: ColorMode;
+  customVariables: Variables;
+};
