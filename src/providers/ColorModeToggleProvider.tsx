@@ -8,7 +8,11 @@ import React, {
 } from 'react';
 
 import {ColorModeContextValue, ColorModeToggleProps} from '../types';
-import {createDefaultVariables, getColorValue} from '../helpers';
+import {
+  createDefaultVariables,
+  getColorValue,
+  toggleColorVariables
+} from '../helpers';
 import {usePrefersColorScheme} from '../hooks/usePrefersColorScheme';
 
 const ColorModeContext = createContext({} as ColorModeContextValue);
@@ -22,6 +26,14 @@ export function ColorModeToggleProvider({
   const [colorMode, setColorMode] = useState(initialColorMode);
   const {prefersColorScheme, hasMounted} = usePrefersColorScheme();
 
+  const toggleColorMode = useCallback(() => {
+    setColorMode(prev => {
+      const newColorMode = prev === 'dark' ? 'light' : 'dark';
+
+      return newColorMode;
+    });
+  }, [colorMode, prefersColorScheme]);
+
   useEffect(() => {
     const shouldUsePrefersColorScheme =
       hasMounted && !initialColorMode && prefersColorScheme;
@@ -33,34 +45,13 @@ export function ColorModeToggleProvider({
     setColorMode(prefersColorScheme);
   }, [hasMounted, initialColorMode, prefersColorScheme]);
 
-  const defaultVariables = useMemo(() => createDefaultVariables(theme), [
-    theme
-  ]);
+  useEffect(() => {
+    if (!colorMode) {
+      return;
+    }
 
-  const toggleColorMode = useCallback(() => {
-    const root = window.document.documentElement;
-
-    setColorMode(prev => {
-      const newColorMode = prev === 'dark' ? 'light' : 'dark';
-      const isDarkMode = newColorMode === 'dark';
-
-      Object.entries({
-        ...defaultVariables,
-        ...customVariables
-      }).forEach(([name, values]) =>
-        root.style.setProperty(
-          name,
-          isDarkMode
-            ? `${getColorValue(theme, values[1])}`
-            : `${getColorValue(theme, values[0])}`
-        )
-      );
-
-      root.style.setProperty('--chakra-ui-color-mode', newColorMode);
-
-      return newColorMode;
-    });
-  }, [colorMode]);
+    toggleColorVariables({theme, colorMode, customVariables});
+  }, [theme, customVariables, colorMode]);
 
   const payload = useMemo(
     () => ({
