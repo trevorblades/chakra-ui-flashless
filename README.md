@@ -122,6 +122,21 @@ export default class MyDocument extends Document {
 }
 ```
 
+If you have a [Custom App](https://nextjs.org/docs/advanced-features/custom-app), you may also need to wrap it with the `ChakraProvider` and your theme.
+
+```jsx
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from './theme';
+
+function myApp({ Component, pageProps }) {
+  return (
+    <ChakraProvider theme={theme}>
+      <Component {...pageProps} />
+    </ChakraProvider>
+  );
+}
+```
+
 ## Custom variables
 
 You can create additional color variables to use in your UI with the `customVariables` prop. It accepts an object that maps CSS variable names to their light and dark variants using an array with two values.
