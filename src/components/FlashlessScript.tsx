@@ -3,6 +3,8 @@ import {Dict} from '@chakra-ui/utils';
 import {getColor, transparentize} from '@chakra-ui/theme-tools';
 import {outdent} from 'outdent';
 
+import {Color, Variables} from '../types';
+
 const baseVariables = {
   '--bg': ['white', 'gray.800'],
   '--text': ['gray.800', 'whiteAlpha.900'],
@@ -10,9 +12,6 @@ const baseVariables = {
   '--border': ['gray.200', 'whiteAlpha.300'],
   '--badge-text': ['white', 'whiteAlpha.800']
 };
-
-type Color = string | [string, number];
-type Variables = Record<string, [Color, Color]>;
 
 function createVariables(theme: Dict, customVariables?: Variables): string {
   function colorValue(color: Color) {
